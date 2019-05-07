@@ -1,6 +1,8 @@
 # YAWF
 Yet Another Web Fuzzing Tool
 
+Do not use this tool for any illegal activity.  This is for research purposes only. 
+
 Options For yawf.py 
 
 usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--version] 
