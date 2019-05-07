@@ -40,3 +40,10 @@ optional arguments:
             Script will report all responses that are 5% different.
             
   --verbose Prints all responses, whether they are identical to the intial landing page, or not. 
+  
+  
+ Future Goals
+ 
+ Add option for multiple threads to increase the speed
+ Allow uses to specifcy difference cut off point
+ Add additional fuzzing commands
