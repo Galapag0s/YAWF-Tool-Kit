@@ -45,5 +45,7 @@ optional arguments:
  Future Goals
  
  Add option for multiple threads to increase the speed
+ 
  Allow uses to specifcy difference cut off point
+ 
  Add additional fuzzing commands
