@@ -1,9 +1,9 @@
 # YAWF
 Yet Another Web Fuzzing Tool
 
-Options For yawf.py \n
+Options For yawf.py 
 
-usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--version] \n
+usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--version] 
 
 Yet Another Web Fuzzing Tool Designed to Brute Force Directories
 
