@@ -47,6 +47,8 @@ optional arguments:
   
  Future Goals
  
+ Don't Show 404 code
+ 
  Make code check if Tor is running and start it (if tor is chosen for exe method) (/usr/bin/tor)
  
  Add option for multiple threads to increase the speed.
