@@ -45,6 +45,8 @@ optional arguments:
   
  Future Goals
  
+ Make code check if Tor is running and start it (if tor is chosen for exe method)
+ 
  Add option for multiple threads to increase the speed.
  
  Program Script to Learn Cut Off point dynamically
