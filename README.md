@@ -3,6 +3,8 @@ Yet Another Web Fuzzing Tool
 
 Do not use this tool for any illegal activity.  This is for research purposes only. 
 
+Designed for Linux with Python3
+
 Options For yawf.py 
 
 usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--tor]
@@ -45,7 +47,7 @@ optional arguments:
   
  Future Goals
  
- Make code check if Tor is running and start it (if tor is chosen for exe method)
+ Make code check if Tor is running and start it (if tor is chosen for exe method) (/usr/bin/tor)
  
  Add option for multiple threads to increase the speed.
  
