@@ -4,6 +4,7 @@ import argparse
 import sys
 import requests
 import hashlib
+import os
 
 def main():
 	#Create Parser Obj to get input arguments
@@ -13,7 +14,7 @@ def main():
 	parser.add_argument('-c', action="store_true", help="Hash the Landing Page and Compare all Subsequent Requests to the Hash.  Ideal for static landing pages")
 	parser.add_argument('--verbose', action="store_true", help='Print Verbose Output')
 	parser.add_argument('--tor', action="store_true", help='Use Tor To Anonymize Connections')
-	parser.add_argument('--version', action='version', version='%(prog)s 2.0')
+	parser.add_argument('--version', action='version', version='%(prog)s 2.1')
 
 	if len(sys.argv[1:]) == 0:
 		parser.print_help()
@@ -22,6 +23,7 @@ def main():
 	inputs = parser.parse_args()
 
 	if inputs.tor == True:
+		os.system("/usr/bin/tor")
 		print("You are anonymized")
 
 		session = requests.session()
@@ -161,7 +163,6 @@ def verboseNoCrypt(url,fileName,arrayResults,torCon):
 				initLen = len(arrayResults[1]) * 1.0
 				fracDif = (difLen/initLen)*1.0
 				perDif = fracDif * 100.0
-				print(bruteRes)
 				#Print out all results
 				print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 
