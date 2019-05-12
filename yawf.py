@@ -13,7 +13,7 @@ def main():
 	parser.add_argument('-c', action="store_true", help="Hash the Landing Page and Compare all Subsequent Requests to the Hash.  Ideal for static landing pages")
 	parser.add_argument('--verbose', action="store_true", help='Print Verbose Output')
 	parser.add_argument('--tor', action="store_true", help='Use Tor To Anonymize Connections')
-	parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+	parser.add_argument('--version', action='version', version='%(prog)s 2.0')
 
 	if len(sys.argv[1:]) == 0:
 		parser.print_help()
