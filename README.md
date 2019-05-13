@@ -5,7 +5,18 @@ Do not use this tool for any illegal activity.  This is for research purposes on
 
 Designed for Linux with Python3
 
-Options For yawf.py 
+To Run this Tool ensure Python3 and Tor are installed. (Tor is only needed if you wish to anonymize yourself)
+
+##Install Instructions
+
+clone https://github.com/aturecek/YAWF.git
+
+apt-get install python3
+
+apt-get install tor
+
+
+##Options For yawf.py 
 
 usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--tor]
                  [--version]
@@ -45,7 +56,7 @@ optional arguments:
 
   
   
- Future Goals
+ ##Future Goals
  
  Don't Show 404 code
  
