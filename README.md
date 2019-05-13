@@ -55,13 +55,21 @@ optional arguments:
                      Show program's version number and exit
 
   
-  
+ ## Versions
+ 
+ 1.0 Initial Release
+ 
+                     Created Basic Framework
+                     Script could perform hash and statistical based analysis
+ 2.0 TOR Release
+      
+                     Added Support for TOR
+                     
+ 
  ## Future Goals
  
  Don't Show 404 code
- 
- Make code check if Tor is running and start it (if tor is chosen for exe method) (/usr/bin/tor)
- 
+
  Add option for multiple threads to increase the speed.
  
  Program Script to Learn Cut Off point dynamically
