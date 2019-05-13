@@ -15,6 +15,8 @@ apt-get install python3
 
 apt-get install tor
 
+pip install -r requirements.txt
+
 
 ## Options For yawf.py 
 
