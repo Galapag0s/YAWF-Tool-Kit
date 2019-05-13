@@ -68,12 +68,12 @@ optional arguments:
  
  ## Future Goals
  
- Don't Show 404 code
+ - Don't Show 404 code
 
- Add option for multiple threads to increase the speed.
+ - Add option for multiple threads to increase the speed.
  
- Program Script to Learn Cut Off point dynamically
+ - Program Script to Learn Cut Off point dynamically
  
- Add additional fuzzing commands.
+ - Add additional fuzzing commands.
  
- Add user friendly error reporting
+ - Add user friendly error reporting
