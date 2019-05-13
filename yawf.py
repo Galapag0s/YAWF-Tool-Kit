@@ -15,14 +15,17 @@ def main():
 	parser.add_argument('--verbose', action="store_true", help='Print Verbose Output')
 	parser.add_argument('--tor', action="store_true", help='Use Tor To Anonymize Connections')
 	parser.add_argument('--version', action='version', version='%(prog)s 2.1')
-
+	
+	#Check and Ensure Proper Arguments were passed.  If not, displays help menu
 	if len(sys.argv[1:]) == 0:
 		parser.print_help()
 		parser.exit()
 	#Get arguments
 	inputs = parser.parse_args()
 
+	#Uses Tor Network to Check Website
 	if inputs.tor == True:
+		#Starts Tor (if already running tor handles itself)
 		os.system("/usr/bin/tor")
 		print("You are anonymized")
 
@@ -32,6 +35,7 @@ def main():
 		session.proxies['https'] = 'socks5h://localhost:9050'
 		hostGet = session.get("https://httpbin.org/ip")
 		initResponse = hostGet.text
+		#Displays Your Public Address (Should be Tor Node)
 		print("Your Exit IP Is: ", initResponse)
 
 		initArray = tor_Request(inputs.target)
@@ -57,7 +61,7 @@ def main():
 		if inputs.verbose == False and inputs.c == False:
 				noVerboseNoCrypt(inputs.target, inputs.directoryFile,initArray,False)
 
-
+#Make Initial Request without Tor
 def no_Tor(url):
 		hostGet = requests.get(url)
 		initResponse = hostGet.text
@@ -66,6 +70,7 @@ def no_Tor(url):
 		initArray = [initHash,initList]
 		return initArray
 
+#Make Initial Requests using Tor
 def tor_Request(url):
 		session = requests.session()
 		session.proxies = {}
@@ -80,6 +85,7 @@ def tor_Request(url):
 		initArray = [initHash,initList]
 		return initArray
 
+#Uses a hashing method to test if pages are unique.  Prints all results, even not unique ones.
 def verboseCrypt(url,fileName,arrayResults,torCon):
 	if torCon == True :
 		session = requests.session()
@@ -112,7 +118,7 @@ def verboseCrypt(url,fileName,arrayResults,torCon):
 				else:
 					print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
 
-
+#Uses a hashing method to test if pages are unique.
 def noVerboseCrypt(url,fileName,arrayResults,torCon):
 	if torCon == True :
 		session = requests.session()
@@ -141,7 +147,7 @@ def noVerboseCrypt(url,fileName,arrayResults,torCon):
 				if bruteHash != arrayResults[0] :
 					print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 
-
+#Compares how similar pages are via a line by line analysis.  Returns all results, even non unique pages.
 def verboseNoCrypt(url,fileName,arrayResults,torCon):
 	if torCon == True :
 
@@ -183,7 +189,7 @@ def verboseNoCrypt(url,fileName,arrayResults,torCon):
 				#Print out all results
 				print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 
-
+#Compares how similar pages are via a line by line analysis.
 def noVerboseNoCrypt(url,fileName,arrayResults,torCon):
 	if torCon == True :
 
