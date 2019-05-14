@@ -70,6 +70,8 @@ optional arguments:
  
  ## Future Goals
  
+ - Combine Verbose and No Verbose, Pass verbose as an option to each function
+ 
  - Don't Show 404 code
 
  - Add option for multiple threads to increase the speed.
