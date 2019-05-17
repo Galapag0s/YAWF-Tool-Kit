@@ -49,9 +49,9 @@ def main():
 		#Gather initial request for analysis
 		initArray = tor_Request(inputs.target)
 		if inputs.c == True :
-				verboseCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
+				requestCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
 		if inputs.c == False:
-				verboseNoCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
+				noCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
 
 		#print(tor_Request(inputs.target))
 	if inputs.tor == False:
@@ -59,9 +59,9 @@ def main():
 		#Gather initial request for analysis
 		initArray = no_Tor(inputs.target)
 		if inputs.c == True :
-				verboseCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
+				requestCryptCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
 		if inputs.c == False:
-				verboseNoCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
+				noCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
 
 #Make Initial Request without Tor
 def no_Tor(url):
@@ -89,7 +89,7 @@ def tor_Request(url):
 
 
 #Uses a hashing method to test if pages are unique.
-def noVerboseCrypt(url,fileName,arrayResults,torCon,verbose):
+def requestCrypt(url,fileName,arrayResults,torCon,verbose):
 	if torCon == True :
 		session = requests.session()
 		session.proxies = {}
@@ -129,7 +129,7 @@ def noVerboseCrypt(url,fileName,arrayResults,torCon,verbose):
 				
 
 #Compares how similar pages are via a line by line analysis.
-def NoCrypt(url,fileName,arrayResults,torCon,verbose):
+def noCrypt(url,fileName,arrayResults,torCon,verbose):
 	if torCon == True :
 
 		session = requests.session()
