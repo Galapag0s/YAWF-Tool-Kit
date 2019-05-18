@@ -69,8 +69,6 @@ optional arguments:
                      
  
  ## Future Goals
- 
- - Don't Show 404 code
 
  - Add option for multiple threads to increase the speed.
  
