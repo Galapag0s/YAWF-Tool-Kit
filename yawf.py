@@ -111,7 +111,7 @@ def requestCrypt(url,fileName,arrayResults,torCon,verbose):
 						print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
 				else:
 					#Nonverbose Results
-					if bruteHash != arrayResults[0] :
+					if bruteHash != arrayResults[0] and statusRes != 404:
 						print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 	if torCon == False :
 		with open( fileName, 'r') as ins:
@@ -129,7 +129,7 @@ def requestCrypt(url,fileName,arrayResults,torCon,verbose):
 						print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
 				else:
 					#Nonverbose Results
-					if bruteHash != arrayResults[0] :
+					if bruteHash != arrayResults[0] and statusRes != 404:
 						print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 
 
@@ -161,7 +161,7 @@ def noCrypt(url,fileName,arrayResults,torCon,verbose):
 					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 				else:
 					#Non Verbose Results
-					if perDif > 5.0 :
+					if perDif > 5.0 and statusRes != 404:
 						print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 
 	if torCon == False :
@@ -184,7 +184,7 @@ def noCrypt(url,fileName,arrayResults,torCon,verbose):
 					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 				else:
 					#Non Verbos Results
-					if perDif > 5.0 :
+					if perDif > 5.0 and statusRes != 404:
 						print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)				
 
 if __name__ == "__main__":
