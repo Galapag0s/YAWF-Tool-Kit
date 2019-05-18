@@ -66,6 +66,8 @@ optional arguments:
  2.0 TOR Release
       
                      Added Support for TOR
+                     Improved Internal Functions by Removing Redundant Code
+                     Improved Script Feedback to Supply more useful data
                      
  
  ## Future Goals
