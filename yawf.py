@@ -6,6 +6,7 @@ import requests
 import hashlib
 import os
 import json
+import threading
 
 def main():
 	#Create Parser Obj to get input arguments
@@ -15,7 +16,7 @@ def main():
 	parser.add_argument('-c', action="store_true", help="Hash the Landing Page and Compare all Subsequent Requests to the Hash.  Ideal for static landing pages")
 	parser.add_argument('--verbose', action="store_true", help='Print Verbose Output')
 	parser.add_argument('--tor', action="store_true", help='Use Tor To Anonymize Connections')
-	parser.add_argument('--version', action='version', version='%(prog)s 2.1')
+	parser.add_argument('--version', action='version', version='%(prog)s 3.0')
 
 	#Check and Ensure Proper Arguments were passed.  If not, displays help menu
 	if len(sys.argv[1:]) == 0:
@@ -23,6 +24,12 @@ def main():
 		parser.exit()
 	#Get arguments
 	inputs = parser.parse_args()
+
+	#Break up text file into seperate lists
+	with open(inputs.directoryFile) as f:
+		wordList = f.readlines()
+	listOne = wordList[:len(wordList)//2]
+	listTwo = wordList[len(wordList)//2:]
 
 	#Uses Tor Network to Check Website
 	if inputs.tor == True:
@@ -49,9 +56,21 @@ def main():
 		#Gather initial request for analysis
 		initArray = tor_Request(inputs.target)
 		if inputs.c == True :
-				requestCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
+			thread1 = threading.Thread(target=requestCrypt, args=(inputs.target,listOne,initArray,True,inputs.verbose,))
+			thread2 = threading.Thread(target=requestCrypt, args=(inputs.target,listTwo,initArray,True,inputs.verbose,))
+			thread1.start()
+			thread2.start()
+			thread1.join()
+			thread2.join()
+			#requestCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
 		if inputs.c == False:
-				noCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
+			thread1 = threading.Thread(target=noCrypt, args=(inputs.target,listOne,initArray,True,inputs.verbose,))
+			thread2 = threading.Thread(target=noCrypt, args=(inputs.target,listTwo,initArray,True,inputs.verbose,))
+			thread1.start()
+			thread2.start()
+			thread1.join()
+			thread2.join()
+			#noCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
 
 		#print(tor_Request(inputs.target))
 	if inputs.tor == False:
@@ -59,9 +78,21 @@ def main():
 		#Gather initial request for analysis
 		initArray = no_Tor(inputs.target)
 		if inputs.c == True :
-				requestCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
+			thread1 = threading.Thread(target=requestCrypt, args=(inputs.target,listOne,initArray,False,inputs.verbose,))
+			thread2 = threading.Thread(target=requestCrypt, args=(inputs.target,listTwo,initArray,False,inputs.verbose,))
+			thread1.start()
+			thread2.start()
+			thread1.join()
+			thread2.join()
+			#requestCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
 		if inputs.c == False:
-				noCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
+			thread1 = threading.Thread(target=noCrypt, args=(inputs.target,listOne,initArray,False,inputs.verbose,))
+			thread2 = threading.Thread(target=noCrypt, args=(inputs.target,listTwo,initArray,False,inputs.verbose,))
+			thread1.start()
+			thread2.start()
+			thread1.join()
+			thread2.join()
+			#noCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
 
 #Make Initial Request without Tor
 def no_Tor(url):
@@ -96,41 +127,37 @@ def requestCrypt(url,fileName,arrayResults,torCon,verbose):
 		session.proxies['http'] = 'socks5h://localhost:9050'
 		session.proxies['https'] = 'socks5h://localhost:9050'
 
-		with open( fileName, 'r') as ins:
-			array = []
-			for line in ins:
-				hostTest = session.get(url +  (line.rstrip('\n')))
-				bruteRes = hostTest.text
-				statusRes = hostTest.status_code
-				bruteHash = hashlib.sha1(bruteRes.encode('utf-8')).hexdigest()
-				if verbose:
-					#Verbose Results
-					if bruteHash != arrayResults[0]:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
-					else:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
+		for line in fileName:
+			hostTest = session.get(url +  (line.rstrip('\n')))
+			bruteRes = hostTest.text
+			statusRes = hostTest.status_code
+			bruteHash = hashlib.sha1(bruteRes.encode('utf-8')).hexdigest()
+			if verbose:
+				#Verbose Results
+				if bruteHash != arrayResults[0]:
+					print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 				else:
-					#Nonverbose Results
-					if bruteHash != arrayResults[0] and statusRes != 404:
+					print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
+			else:
+				#Nonverbose Results
+				if bruteHash != arrayResults[0] and statusRes != 404:
 						print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 	if torCon == False :
-		with open( fileName, 'r') as ins:
-			array = []
-			for line in ins:
-				hostTest = requests.get(url +  (line.rstrip('\n')))
-				bruteRes = hostTest.text
-				statusRes = hostTest.status_code
-				bruteHash = hashlib.sha1(bruteRes.encode('utf-8')).hexdigest()
-				if verbose:
-					#Verbose Results
-					if bruteHash != arrayResults[0]:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
-					else:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
+		for line in fileName:
+			hostTest = requests.get(url +  (line.rstrip('\n')))
+			bruteRes = hostTest.text
+			statusRes = hostTest.status_code
+			bruteHash = hashlib.sha1(bruteRes.encode('utf-8')).hexdigest()
+			if verbose:
+				#Verbose Results
+				if bruteHash != arrayResults[0]:
+					print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 				else:
-					#Nonverbose Results
-					if bruteHash != arrayResults[0] and statusRes != 404:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
+					print(url + (line.rstrip('\n')) + ' : ' + 'Nothing New : ', statusRes)
+			else:
+				#Nonverbose Results
+				if bruteHash != arrayResults[0] and statusRes != 404:
+					print(url + (line.rstrip('\n')) + ' : ' + 'Unique Resolve : ', statusRes)
 
 
 #Compares how similar pages are via a line by line analysis.
@@ -142,50 +169,46 @@ def noCrypt(url,fileName,arrayResults,torCon,verbose):
 		session.proxies['http'] = 'socks5h://localhost:9050'
 		session.proxies['https'] = 'socks5h://localhost:9050'
 
-		with open( fileName, 'r') as ins:
-			array = []
-			for line in ins:
-				hostTest = session.get(url +  (line.rstrip('\n')))
-				bruteRes = hostTest.text
-				statusRes = hostTest.status_code
-				#Compare Init Response with Brute Response
-				bruteList = list(bruteRes.split('\n'))
-				difList = (list(set(arrayResults[1]) - (set(bruteList))))
-				difLen = len(difList) * 1.0
-				initLen = len(arrayResults[1]) * 1.0
-				fracDif = (difLen/initLen)*1.0
-				perDif = fracDif * 100.0
-				#Print out results
-				if verbose:
-					#Verbose Results
+		for line in fileName:
+			hostTest = session.get(url +  (line.rstrip('\n')))
+			bruteRes = hostTest.text
+			statusRes = hostTest.status_code
+			#Compare Init Response with Brute Response
+			bruteList = list(bruteRes.split('\n'))
+			difList = (list(set(arrayResults[1]) - (set(bruteList))))
+			difLen = len(difList) * 1.0
+			initLen = len(arrayResults[1]) * 1.0
+			fracDif = (difLen/initLen)*1.0
+			perDif = fracDif * 100.0
+			#Print out results
+			if verbose:
+				#Verbose Results
+				print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
+			else:
+				#Non Verbose Results
+				if perDif > 5.0 and statusRes != 404:
 					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
-				else:
-					#Non Verbose Results
-					if perDif > 5.0 and statusRes != 404:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 
 	if torCon == False :
-		with open( fileName, 'r') as ins:
-			array = []
-			for line in ins:
-				hostTest = requests.get(url +  (line.rstrip('\n')))
-				bruteRes = hostTest.text
-				statusRes = hostTest.status_code
-				#Compare Init Response with Brute Response
-				bruteList = list(bruteRes.split('\n'))
-				difList = (list(set(arrayResults[1]) - (set(bruteList))))
-				difLen = len(difList) * 1.0
-				initLen = len(arrayResults[1]) * 1.0
-				fracDif = (difLen/initLen)*1.0
-				perDif = fracDif * 100.0
-				#Print out results
-				if verbose:
-					#Verbose Results
-					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
-				else:
-					#Non Verbos Results
-					if perDif > 5.0 and statusRes != 404:
-						print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)				
+		for line in fileName:
+			hostTest = requests.get(url +  (line.rstrip('\n')))
+			bruteRes = hostTest.text
+			statusRes = hostTest.status_code
+			#Compare Init Response with Brute Response
+			bruteList = list(bruteRes.split('\n'))
+			difList = (list(set(arrayResults[1]) - (set(bruteList))))
+			difLen = len(difList) * 1.0
+			initLen = len(arrayResults[1]) * 1.0
+			fracDif = (difLen/initLen)*1.0
+			perDif = fracDif * 100.0
+			#Print out results
+			if verbose:
+				#Verbose Results
+				print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
+			else:
+				#Non Verbos Results
+				if perDif > 5.0 and statusRes != 404:
+					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)				
 
 if __name__ == "__main__":
 	main()
