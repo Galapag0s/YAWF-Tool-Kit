@@ -81,8 +81,6 @@ optional arguments:
   
  ## Future Goals
 
- - Rework some variable names so they fit better
- 
  - Program Script to Learn Cut Off point dynamically
  
  - Add additional fuzzing commands.
