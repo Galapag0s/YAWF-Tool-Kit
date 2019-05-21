@@ -14,9 +14,10 @@ def main():
 	parser.add_argument('-t','--target',  action="store", dest="target", help='Takes in the target url')
 	parser.add_argument('-f', '--file', action="store", dest="directoryFile", help='Takes in the file containing directories')
 	parser.add_argument('-c', action="store_true", help="Hash the Landing Page and Compare all Subsequent Requests to the Hash.  Ideal for static landing pages")
+	parser.add_argument('-n', action="store", dest="numThreads", nargs='?', const=1, type=int, default=1, help="Takes in the number of threads to run")
 	parser.add_argument('--verbose', action="store_true", help='Print Verbose Output')
 	parser.add_argument('--tor', action="store_true", help='Use Tor To Anonymize Connections')
-	parser.add_argument('--version', action='version', version='%(prog)s 3.0')
+	parser.add_argument('--version', action='version', version='%(prog)s 3.1')
 
 	#Check and Ensure Proper Arguments were passed.  If not, displays help menu
 	if len(sys.argv[1:]) == 0:
@@ -25,11 +26,25 @@ def main():
 	#Get arguments
 	inputs = parser.parse_args()
 
-	#Break up text file into seperate lists
+	#Break up text file with all directories into seperate lists
 	with open(inputs.directoryFile) as f:
 		wordList = f.readlines()
-	listOne = wordList[:len(wordList)//2]
-	listTwo = wordList[len(wordList)//2:]
+
+	while inputs.numThreads > len(wordList):
+		inputs.numThreads = inputs.numThreads - 1
+
+	if len(wordList) % 2 != 0:
+		numEle = (len(wordList)/inputs.numThreads)
+	else:
+		numEle = (len(wordList)/inputs.numThreads)+1
+	#Break File into Multiple Secitons for the threads
+	def divideList(list,sectionSize):
+		for i in range(0, len(list), sectionSize):
+			yield list[i:i + sectionSize]
+
+	#Create list with all words for each thread
+	wordListParts = list(divideList(wordList,int(numEle)))
+
 
 	#Uses Tor Network to Check Website
 	if inputs.tor == True:
@@ -56,21 +71,24 @@ def main():
 		#Gather initial request for analysis
 		initArray = tor_Request(inputs.target)
 		if inputs.c == True :
-			thread1 = threading.Thread(target=requestCrypt, args=(inputs.target,listOne,initArray,True,inputs.verbose,))
-			thread2 = threading.Thread(target=requestCrypt, args=(inputs.target,listTwo,initArray,True,inputs.verbose,))
-			thread1.start()
-			thread2.start()
-			thread1.join()
-			thread2.join()
-			#requestCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
+			threads = []
+			for i in range(inputs.numThreads):
+				t = threading.Thread(target=requestCrypt, args=(inputs.target,wordListParts[i],initArray,True,inputs.verbose,))
+				threads.append(t)
+				t.start()
+
+			for i in range(inputs.numThreads):
+				threads[i].join()
+
 		if inputs.c == False:
-			thread1 = threading.Thread(target=noCrypt, args=(inputs.target,listOne,initArray,True,inputs.verbose,))
-			thread2 = threading.Thread(target=noCrypt, args=(inputs.target,listTwo,initArray,True,inputs.verbose,))
-			thread1.start()
-			thread2.start()
-			thread1.join()
-			thread2.join()
-			#noCrypt(inputs.target,inputs.directoryFile,initArray,True,inputs.verbose)
+			threads = []
+			for i in range(inputs.numThreads):
+				t = threading.Thread(target=noCrypt, args=(inputs.target,wordListParts[i],initArray,True,inputs.verbose,))
+				threads.append(t)
+				t.start()
+
+			for i in range(inputs.numThreads):
+				threads[i].join()
 
 		#print(tor_Request(inputs.target))
 	if inputs.tor == False:
@@ -78,21 +96,25 @@ def main():
 		#Gather initial request for analysis
 		initArray = no_Tor(inputs.target)
 		if inputs.c == True :
-			thread1 = threading.Thread(target=requestCrypt, args=(inputs.target,listOne,initArray,False,inputs.verbose,))
-			thread2 = threading.Thread(target=requestCrypt, args=(inputs.target,listTwo,initArray,False,inputs.verbose,))
-			thread1.start()
-			thread2.start()
-			thread1.join()
-			thread2.join()
-			#requestCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
+			threads = []
+			for i in range(inputs.numThreads):
+				t = threading.Thread(target=requestCrypt, args=(inputs.target,wordListParts[i],initArray,False,inputs.verbose,))
+				threads.append(t)
+				t.start()
+
+			for i in range(inputs.numThreads):
+				threads[i].join()
+
 		if inputs.c == False:
-			thread1 = threading.Thread(target=noCrypt, args=(inputs.target,listOne,initArray,False,inputs.verbose,))
-			thread2 = threading.Thread(target=noCrypt, args=(inputs.target,listTwo,initArray,False,inputs.verbose,))
-			thread1.start()
-			thread2.start()
-			thread1.join()
-			thread2.join()
-			#noCrypt(inputs.target,inputs.directoryFile,initArray,False,inputs.verbose)
+			threads = []
+			for i in range(inputs.numThreads):
+				t = threading.Thread(target=noCrypt, args=(inputs.target,wordListParts[i],initArray,False,inputs.verbose,))
+				threads.append(t)
+				t.start()
+
+			for i in range(inputs.numThreads):
+				threads[i].join()
+
 
 #Make Initial Request without Tor
 def no_Tor(url):
@@ -208,7 +230,7 @@ def noCrypt(url,fileName,arrayResults,torCon,verbose):
 			else:
 				#Non Verbos Results
 				if perDif > 5.0 and statusRes != 404:
-					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)				
+					print(url + (line.rstrip('\n')) + ' : ' + 'Percent Difference' , perDif , ' : ' , statusRes)
 
 if __name__ == "__main__":
 	main()
