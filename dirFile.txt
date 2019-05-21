@@ -1,7 +1,0 @@
-robots.txt
-test.txt
-hi.txt
-how.txt
-are.txt
-ypou.txt
-thankyouforbeingyou.txt
