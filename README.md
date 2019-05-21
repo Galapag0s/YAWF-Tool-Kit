@@ -43,7 +43,10 @@ optional arguments:
                         
                      Hash the Landing Page and Compare all Subsequent
                      Requests to the Hash. Ideal for static landing pages
-                        
+  -n NUMTHREADS
+  	
+		     Takes in the number of threads you wish to use
+                
   --verbose             
   
                      Print Verbose Output
@@ -70,13 +73,15 @@ optional arguments:
                      Improved Script Feedback to Supply more useful data
  3.0 Multi-Thread Release
 
-		     Added Support for Multi-Threading (2 threads)                    
+		     Added Support for Multi-Threading (2 threads)
+		     
+ 3.1 Multi-Thread Update
+ 			
+		     Added Support for User Input in regards to Threads
   
  ## Future Goals
 
  - Rework some variable names so they fit better
- 
- - Allow users to specific number of threads
  
  - Program Script to Learn Cut Off point dynamically
  
