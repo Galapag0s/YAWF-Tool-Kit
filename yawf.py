@@ -96,6 +96,8 @@ def main():
 		initArray = no_Tor(inputs.target)
 		if inputs.c == True :
 			threads = []
+			if inputs.numThreads > len(wordListParts):
+				inputs.numThreads = len(wordListParts)
 			for i in range(inputs.numThreads):
 				t = threading.Thread(target=requestCrypt, args=(inputs.target,wordListParts[i],initArray,False,inputs.verbose,))
 				threads.append(t)
@@ -106,6 +108,8 @@ def main():
 
 		if inputs.c == False:
 			threads = []
+			if inputs.numThreads > len(wordListParts):
+				inputs.numThreads = len(wordListParts)
 			for i in range(inputs.numThreads):
 				t = threading.Thread(target=noCrypt, args=(inputs.target,wordListParts[i],initArray,False,inputs.verbose,))
 				threads.append(t)
