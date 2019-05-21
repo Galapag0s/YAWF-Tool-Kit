@@ -30,13 +30,13 @@ def main():
 	with open(inputs.directoryFile) as f:
 		wordList = f.readlines()
 
-	while inputs.numThreads > len(wordList):
+	while inputs.numThreads > len(wordList)+1:
 		inputs.numThreads = inputs.numThreads - 1
 
 	if len(wordList) % 2 != 0:
-		numEle = (len(wordList)/inputs.numThreads)
-	else:
 		numEle = (len(wordList)/inputs.numThreads)+1
+	else:
+		numEle = (len(wordList)/inputs.numThreads)
 	#Break File into Multiple Secitons for the threads
 	def divideList(list,sectionSize):
 		for i in range(0, len(list), sectionSize):
@@ -44,7 +44,6 @@ def main():
 
 	#Create list with all words for each thread
 	wordListParts = list(divideList(wordList,int(numEle)))
-
 
 	#Uses Tor Network to Check Website
 	if inputs.tor == True:
