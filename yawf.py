@@ -30,13 +30,12 @@ def main():
 	with open(inputs.directoryFile) as f:
 		wordList = f.readlines()
 
-	while inputs.numThreads > len(wordList)+1:
-		inputs.numThreads = inputs.numThreads - 1
-
+	#Adjusts number of elements to ensure last word in file with odd number of words isn't skipped
 	if len(wordList) % 2 != 0:
 		numEle = (len(wordList)/inputs.numThreads)+1
 	else:
 		numEle = (len(wordList)/inputs.numThreads)
+
 	#Break File into Multiple Secitons for the threads
 	def divideList(list,sectionSize):
 		for i in range(0, len(list), sectionSize):
@@ -71,50 +70,62 @@ def main():
 		initArray = tor_Request(inputs.target)
 		if inputs.c == True :
 			threads = []
+			#Ensure the number of threads isn't too high for the number of words in input file
+			if inputs.numThreads > len(wordListParts):
+				inputs.numThreads = len(wordListParts)
+			#Starts all the threads
 			for i in range(inputs.numThreads):
 				t = threading.Thread(target=requestCrypt, args=(inputs.target,wordListParts[i],initArray,True,inputs.verbose,))
 				threads.append(t)
 				t.start()
-
+			#Join the threads so program doesn't terminate early...Not sure if there will be timing issues with this...still have to check with larger file
 			for i in range(inputs.numThreads):
 				threads[i].join()
 
 		if inputs.c == False:
 			threads = []
+			#Ensure the number of threads isn't too high for the number of words in input file
+			if inputs.numThreads > len(wordListParts):
+				inputs.numThreads = len(wordListParts)
+			#Starts all the threads
 			for i in range(inputs.numThreads):
 				t = threading.Thread(target=noCrypt, args=(inputs.target,wordListParts[i],initArray,True,inputs.verbose,))
 				threads.append(t)
 				t.start()
 
+			#Join the threads so program doesn't terminate early...Not sure if there will be timing issues with this...still have to check with larger file
 			for i in range(inputs.numThreads):
 				threads[i].join()
 
-		#print(tor_Request(inputs.target))
 	if inputs.tor == False:
 		print("You are not anonymized")
 		#Gather initial request for analysis
 		initArray = no_Tor(inputs.target)
 		if inputs.c == True :
 			threads = []
+			#Ensure the number of threads isn't too high for the number of words in input file
 			if inputs.numThreads > len(wordListParts):
 				inputs.numThreads = len(wordListParts)
+			#Start all threads
 			for i in range(inputs.numThreads):
 				t = threading.Thread(target=requestCrypt, args=(inputs.target,wordListParts[i],initArray,False,inputs.verbose,))
 				threads.append(t)
 				t.start()
 
+			#Join the threads so program doesn't terminate early...Not sure if there will be timing issues with this...still have to check with larger file
 			for i in range(inputs.numThreads):
 				threads[i].join()
 
 		if inputs.c == False:
 			threads = []
+			#Ensure the number of threads isn't too high for the number of words in input file
 			if inputs.numThreads > len(wordListParts):
 				inputs.numThreads = len(wordListParts)
 			for i in range(inputs.numThreads):
 				t = threading.Thread(target=noCrypt, args=(inputs.target,wordListParts[i],initArray,False,inputs.verbose,))
 				threads.append(t)
 				t.start()
-
+			#Join the threads so program doesn't terminate early...Not sure if there will be timing issues with this...still have to check with larger file
 			for i in range(inputs.numThreads):
 				threads[i].join()
 
