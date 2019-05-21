@@ -69,6 +69,7 @@ optional arguments:
                      Improved Internal Functions by Removing Redundant Code
                      Improved Script Feedback to Supply more useful data
  3.0 Multi-Thread Release
+
 		    Added Support for Multi-Threading (2 threads)                    
   
  ## Future Goals
