@@ -70,10 +70,12 @@ optional arguments:
                      Improved Script Feedback to Supply more useful data
  3.0 Multi-Thread Release
 
-		    Added Support for Multi-Threading (2 threads)                    
+		     Added Support for Multi-Threading (2 threads)                    
   
  ## Future Goals
 
+ - Rework some variable names so they fit better
+ 
  - Allow users to specific number of threads
  
  - Program Script to Learn Cut Off point dynamically
