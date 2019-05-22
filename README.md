@@ -9,7 +9,7 @@ To Run this Tool ensure Python3 and Tor are installed. (Tor is only needed if yo
 
 ## Install Instructions
 
-clone https://github.com/aturecek/YAWF.git
+clone https://github.com/aturecek/YAWF-Tool-Kit.git
 
 apt-get install python3
 
@@ -18,9 +18,9 @@ apt-get install tor
 pip install -r requirements.txt
 
 
-## Options For yawf.py 
+## Options For yadb.py 
 
-usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--tor]
+usage: yawf.py [-h] [-t TARGET] [-f DIRECTORYFILE] [-c] [--verbose] [--tor] [-n NUMTHREADS]
                  [--version]
 
 Yet Another Web Fuzzing Tool Designed to Brute Force Directories
@@ -60,7 +60,7 @@ optional arguments:
                      Show program's version number and exit
 
   
- ## Versions
+ ## YADB Versions
  
  1.0 Initial Release
  
