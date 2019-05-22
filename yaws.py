@@ -3,7 +3,7 @@
 #	Name: Yet Another Web Spider
 #
 #	Description: A simple web spider that can crawl a web page.
-#		     It will also look for username/passwords 
+#		     It will also look for username/passwords
 #		     embeded within the sites HTML.
 #
 #	Version: 1.0
@@ -13,12 +13,10 @@
 #!/usr/bin/python
 
 import argparse
-import sys
 import requests
-import hashlib
 import os
+import sys
 import json
-import threading
 
 def main():
 	#Create Parser Obj to get input arguments
@@ -34,6 +32,9 @@ def main():
 		parser.exit()
 	#Get arguments
 	inputs = parser.parse_args()
+
+	#Create intial list to hold crawl resutls
+	crawlResults = []
 
 	#Runs script based on tor or not
 	if inputs.tor == True:
@@ -71,13 +72,19 @@ def main():
 		displayMap(crawlResults)
 
 def spiderTor(target,stack):
+	print("placeholder")
+	#Crawl site with Tor
 
 
 def spiderNoTor(target,stack):
+	print("placeholder")
+	#Crawl site without tor
 
 def displayMap(list):
+	print("Place holder")
 	#Print Top Domain
 	#Print Children Links
 		#Loop
+
 if __name__ == "__main__":
 	main()
