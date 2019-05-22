@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 #---------------------------------------------------------------------------
 #
 #	Name: Yet Another Directory Bruteforcer
@@ -11,6 +9,8 @@
 #	Version: 3.1
 #
 #----------------------------------------------------------------------------
+
+#!/usr/bin/python
 
 import argparse
 import sys
