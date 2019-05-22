@@ -26,9 +26,23 @@ def main():
 	#Get arguments
 	inputs = parser.parse_args()
 
+	#Check and make sure file for brute forcing exists
+	fileExists = os.path.isfile(inputs.directoryFile)
+	if not fileExists:
+		print("We couldn't find your file.  Are you sure its there?")
+		print()
+		print("Here's the help menu.")
+		print()
+		parser.print_help()
+		quit()
+
 	#Break up text file with all directories into seperate lists
 	with open(inputs.directoryFile) as f:
 		wordList = f.readlines()
+
+	#Make sure there is atleast one thread
+	if inputs.numThreads < 1:
+		inputs.numThreads = 1
 
 	#Adjusts number of elements to ensure last word in file with odd number of words isn't skipped
 	if len(wordList) % 2 != 0:
@@ -130,8 +144,9 @@ def main():
 				threads[i].join()
 
 
-#Make Initial Request without Tor
+#Check to Make Sure Site Exists and Make Initial Request without Tor
 def no_Tor(url):
+
 	hostGet = requests.get(url)
 	initResponse = hostGet.text
 	initHash =  hashlib.sha1(initResponse.encode('utf-8')).hexdigest()
@@ -139,7 +154,7 @@ def no_Tor(url):
 	initArray = [initHash,initList]
 	return initArray
 
-#Make Initial Requests using Tor
+#Check to Make Sure Site Exists and Make Initial Requests using Tor
 def tor_Request(url):
 	session = requests.session()
 	session.proxies = {}
@@ -152,7 +167,6 @@ def tor_Request(url):
 	initList = list(initResponse.split('\n'))
 	initArray = [initHash,initList]
 	return initArray
-
 
 #Uses a hashing method to test if pages are unique.
 def requestCrypt(url,fileName,arrayResults,torCon,verbose):
