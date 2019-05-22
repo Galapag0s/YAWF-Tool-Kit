@@ -1,5 +1,17 @@
 #!/usr/bin/python
 
+#---------------------------------------------------------------------------
+#
+#	Name: Yet Another Directory Bruteforcer
+#
+#	Description: A multi threaded directory/file bruteforcer
+#		     Comes with support for TOR, just make sure TOR
+#		     is Running
+#
+#	Version: 3.1
+#
+#----------------------------------------------------------------------------
+
 import argparse
 import sys
 import requests
