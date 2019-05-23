@@ -12,12 +12,14 @@
 
 #!/usr/bin/python
 
+from spider import SpiderSite
 import argparse
 import requests
 import os
 import sys
 import json
 
+#Main Method to run
 def main():
 	#Create Parser Obj to get input arguments
 	parser = argparse.ArgumentParser(description='Yet Another Web Fuzzing Tool Designed to Brute Force Directories')
@@ -81,9 +83,12 @@ def spiderNoTor(target,stack):
 	#Crawl site without tor
 
 def displayMap(list):
-	print("Place holder")
-	#Print Top Domain
-	#Print Children Links
+	firstURL = list[0]
+	print(firstURL)
+	for i in range len(list):
+		for x in range list[i].level
+			print("-")
+		print(list[i].url)
 		#Loop
 
 if __name__ == "__main__":
